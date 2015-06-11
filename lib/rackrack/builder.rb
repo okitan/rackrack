@@ -8,7 +8,7 @@ module Rackrack
   class Builder < SimpleDelegator
     def initialize(name, stub: false,
                    app: ->(env) { [ 404, {}, [] ] }, &block)
-      Rackrack.stubs[name] = @stub = (stub &&= Stub.build)
+      @stub = (stub &&= Stub.build)
 
       @app = Rack::Builder.app do
         use stub if stub

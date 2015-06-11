@@ -37,22 +37,5 @@ describe Rackrack do
         expect(client.get("/").body).to eq("stub_by_rack_server")
       end
     end
-
-    context "with stub" do
-      before do
-        Rackrack.stubs[:hoge].stub do
-          get "/" do
-            [ 200, {}, [ "stub" ] ]
-          end
-        end
-      end
-      after do
-        Rackrack.stubs[:hoge].reset!
-      end
-      it "returns stub response" do
-        expect(client.get("/").status).to eq(200)
-        expect(client.get("/").body).to eq("stub")
-      end
-    end
   end
 end
