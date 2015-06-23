@@ -12,8 +12,8 @@ module Rackrack
               if block_given?
                 @stub = Class.new(Sinatra::Base) do
                   instance_eval(&block)
-                  error 404 do
-                    raise Rackrack::Stub::NoStubException
+                  not_found do
+                    status 502
                   end
                 end
               else
@@ -31,10 +31,16 @@ module Rackrack
           end
 
           def call(env)
-            begin
+            response = begin
               self.class.stub.call(env)
             rescue Rackrack::Stub::NoStubException
+              [ 502, {}, [] ]
+            end
+
+            if response.first == 502
               @app.call(env)
+            else
+              response
             end
           end
         end
