@@ -12,6 +12,7 @@ module Rackrack
               if block_given?
                 @stub = Class.new(Sinatra::Base) do
                   instance_eval(&block)
+                  # I use BadGatewy to describe no stub matched...
                   not_found do
                     status 502
                   end
