@@ -1,3 +1,7 @@
+## 0.1.3
+
+* use 502 to describe no stub matched
+
 ## 0.1.2
 
 * remove Rackrack.stubs
