@@ -22,10 +22,12 @@ describe Rackrack do
     end
 
     context "with rack_server" do
+      let(:response) { "stub_by_rack_server" }
       before do
+        _response = response
         @stub_server.stub do
           get "/" do
-            [ 200, {}, [ "stub_by_rack_server" ] ]
+            [ 200, {}, [ _response ] ]
           end
         end
       end
@@ -34,7 +36,7 @@ describe Rackrack do
       end
       it "returns stub response" do
         expect(client.get("/").status).to eq(200)
-        expect(client.get("/").body).to eq("stub_by_rack_server")
+        expect(client.get("/").body).to eq(response)
       end
     end
   end
