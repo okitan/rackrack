@@ -5,7 +5,7 @@ require "faraday"
 describe Rackrack do
   context ".build_stub" do
     before do
-      @stub_server = Rackrack.build_stub(:hoge, ->(env) { [ 404, {}, ["NotFound"] ] })
+      @stub_server = Rackrack.build_stub(:hoge, ->(env) { [ 404, {}, ["No Route Matched"] ] })
     end
 
     let(:client) do
@@ -17,7 +17,7 @@ describe Rackrack do
     context "by default" do
       it "returns 404" do
         expect(client.get("/").status).to eq(404)
-        expect(client.get("/").body).to eq("NotFound")
+        expect(client.get("/").body).to eq("No Route Matched")
       end
     end
 
@@ -29,6 +29,9 @@ describe Rackrack do
           get "/" do
             [ 200, {}, [ _response ] ]
           end
+          get "/not_found" do
+            [ 404, {}, [ "not_found" ] ]
+          end
         end
       end
       after do
@@ -37,6 +40,10 @@ describe Rackrack do
       it "returns stub response" do
         expect(client.get("/").status).to eq(200)
         expect(client.get("/").body).to eq(response)
+      end
+      it "returns stub response" do
+        expect(client.get("/not_found").status).to eq(404)
+        expect(client.get("/not_found").body).to eq("not_found")
       end
     end
   end

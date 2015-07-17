@@ -12,10 +12,6 @@ module Rackrack
               if block_given?
                 @stub = Class.new(Sinatra::Base) do
                   instance_eval(&block)
-                  # I use BadGatewy to describe no stub matched...
-                  not_found do
-                    status 502
-                  end
                 end
               else
                 @stub ||= raise Rackrack::Stub::NoStubException
@@ -33,15 +29,9 @@ module Rackrack
 
           def call(env)
             response = begin
-              self.class.stub.call(env)
+              self.class.stub.new(@app).call(env)
             rescue Rackrack::Stub::NoStubException
-              [ 502, {}, [] ]
-            end
-
-            if response.first == 502
               @app.call(env)
-            else
-              response
             end
           end
         end
