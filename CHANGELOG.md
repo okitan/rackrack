@@ -1,3 +1,7 @@
+## 0.2.0
+
+* simply use sinatra as middleware
+
 ## 0.1.3
 
 * use 502 to describe no stub matched
