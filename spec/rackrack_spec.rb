@@ -41,9 +41,13 @@ describe Rackrack do
         expect(client.get("/").status).to eq(200)
         expect(client.get("/").body).to eq(response)
       end
-      it "returns stub response" do
+      it "returns stub response for 404 response" do
         expect(client.get("/not_found").status).to eq(404)
         expect(client.get("/not_found").body).to eq("not_found")
+      end
+      it "returns default response for not routed path" do
+        expect(client.get("/not_routed").status).to eq(404)
+        expect(client.get("/not_routed").body).to eq("No Route Matched")
       end
     end
   end
